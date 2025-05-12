@@ -1,0 +1,12 @@
+// Z2-Higgs model is a hybrid Hamiltonian featuring multi-mode interactions
+Const g = 1.5707963;
+Const U = 1.5707963;
+Const J = 1.5707963;
+Const L = 60;
+
+Range i_1 = [0, L-1, 1];
+Range i_2 = [0, L, 1];
+
+Result = - g * Sum_over(i_1){Pauli_X[i_1]}
+        + U * Sum_over(i_2){BC[i_2] * BA[i_2] * BC[i_2] * BA[i_2]}
+        - J * Sum_over(i_1){TensorProd(Pauli_Z[i_1], BC[i_1] * BA[i_1+1] + BC[i_1+1] * BA[i_1])};

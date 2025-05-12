@@ -1,0 +1,17 @@
+// Heisenberg model describes qubit-qubit interactions a spin chain or lattice system
+Const J_x = 1.5707963;
+Const J_y = 1.5707963;
+Const J_z = 1.5707963;
+Const h = 1.5707963;
+Const L = 60;
+
+Range i = [0, L-1, 1];
+Range j = [0, L, 1];
+
+Result = - 0.5 * Sum_over(i){
+    J_x * Pauli_X[i] * Pauli_X[i+1]
+  + J_y * Pauli_Y[i] * Pauli_Y[i+1]
+  + J_z * Pauli_Z[i] * Pauli_Z[i+1]
+} - 0.5 * Sum_over(j){
+    h * Pauli_Z[j]
+};

@@ -1,0 +1,6 @@
+// Kerr nonlinear oscillator Hamiltonian is a single-qumode Hamiltonian
+Const omega = 1.5707963;
+Const kerr = 1.5707963;
+Range i = [0, 1, 1];
+
+Result = Sum_over(i){omega * BC[i] * BA[i] + kerr / 2 * BC[i] * BC[i] * BA[i] * BA[i]};

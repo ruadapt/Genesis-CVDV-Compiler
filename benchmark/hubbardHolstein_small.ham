@@ -1,0 +1,14 @@
+// Hubbard-Holstein model only containing the fermionic and bosonic operators
+Const t = 1.5707963;
+Const U = 1.5707963;
+Const g = 1.5707963;
+Const L = 4;
+
+Range i = [0, L, 1];
+Range j = [0, L, 1];
+Range sigma = [0, 2, 1];
+
+Result = - t * Sum_over(i, j, sigma){FC[i][sigma] * FA[j][sigma]}
+         + U * Sum_over(i){FN[i][1] * FN[i][0]}
+         + Sum_over(i){BC[i] * BA[i]}
+         + g * Sum_over(i, sigma){TensorProd(FN[i][sigma], BC[i] + BA[i])};

@@ -1,0 +1,32 @@
+// Electronic-vibration coupling Hamiltonians, with N qubits and 2N qumodes
+Const omega_0 = 1;
+Const omega_1 = 1;
+Const omega_2 = 1;
+Const chi = 1;
+Const gcd_H1 = 1;
+Const gcd_H2_1 = 1;
+Const gcd_H2_2 = 1;
+Const gcd_H2_3 = 1;
+Const gcd_H2_4 = 1;
+Const gcd_H2_5 = 1;
+Const L = 20;
+
+Range i = [0, L, 1];
+Range j = [1, L, 1];
+Range k = [0, L-1, 1];
+// To avoid out-of-range errors under open boundary conditions, we loop j and k in a range that skips the first and last elements
+// This skips terms involving i-1 or i+1 when i = 0 or i = L-1
+
+Result = Sum_over(i){
+    omega_0 * BC[i] * BA[i] + omega_1 * BC[i+L] * BA[i+L] - omega_2/2 * Pauli_Z[i]
+} + Sum_over(i){
+    - chi/2 * TensorProd(Pauli_Z[i], BC[i] * BA[i]) + gcd_H1/2 * TensorProd(Pauli_Z[i], BA[i] + BC[i])
+} + Sum_over(i){
+    gcd_H2_1/2 * TensorProd(Pauli_Z[i], BA[i+L] + BC[i+L]) 
+} + Sum_over(j){
+    gcd_H2_2/4 * (Pauli_X[j] * Pauli_X[j-1] + Pauli_Y[j] * Pauli_Y[j-1])
+    + gcd_H2_4/4 * TensorProd(Pauli_X[j] * Pauli_X[j-1] + Pauli_Y[j] * Pauli_Y[j-1], BA[j+L] + BC[j+L])
+} + Sum_over(k){
+    gcd_H2_3/4 * (Pauli_X[k] * Pauli_X[k+1] + Pauli_Y[k] * Pauli_Y[k+1]) 
+    + gcd_H2_5/4 * TensorProd(Pauli_X[k] * Pauli_X[k+1] + Pauli_Y[k] * Pauli_Y[k+1], BA[k+L] + BC[k+L])
+};

@@ -1,0 +1,13 @@
+// Bose-Hubbard model is a lattice model whose structure varies with different lattice configurations
+Const t = 1.5707963;
+Const U = 1.5707963;
+Const mu = 1.5707963;
+Const L = 20;
+
+Range i = [0, L, 1];
+Range j = [0, L, 1];
+
+Result = - t * Sum_over(i, j){BC[i] * BA[j] + BC[j] * BA[i]}
+        + U/2 * Sum_over(i){BC[i] * BA[i] * BC[i] * BA[i] - BC[i] * BA[i]}
+        - mu * Sum_over(i){BC[i] * BA[i]};
+        
