@@ -1,0 +1,26 @@
+[
+    {
+        "input_file": "benchmark/heisenberg_small.ham",
+        "output_file": "output/heisenberg_small.cvdvqasm"
+    },
+    {
+        "input_file": "benchmark/electronicVibration_small.ham",
+        "output_file": "output/electronicVibration_small.cvdvqasm"
+    },
+    {
+        "input_file": "benchmark/z2Higgs_small.ham",
+        "output_file": "output/z2Higgs_small.cvdvqasm"
+    },
+    {
+        "input_file": "benchmark/boseHubbard_small.ham",
+        "output_file": "output/boseHubbard_small.cvdvqasm"
+    },
+    {
+        "input_file": "benchmark/hubbardHolstein_small.ham",
+        "output_file": "output/hubbardHolstein_small.cvdvqasm"
+    },
+    {
+        "input_file": "benchmark/kerr_small.ham",
+        "output_file": "output/kerr_small.cvdvqasm"
+    }
+]

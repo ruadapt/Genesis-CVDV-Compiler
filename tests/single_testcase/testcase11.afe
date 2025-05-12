@@ -1,0 +1,1 @@
+exp(prod((-0.25j),paulistring(IIYY),sum(dagger(b(6)),b(6))))

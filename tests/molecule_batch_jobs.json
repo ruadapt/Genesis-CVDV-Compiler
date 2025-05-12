@@ -1,0 +1,82 @@
+[
+    {
+        "input_file": "qubit_hamiltonians/LiH/BK_LiH_sto3g_4_electrons_12_spin_orbitals_Hamiltonian_631_paulis.txt",
+        "output_file": "output/BK_LiH_sto3g_4_electrons_12_spin_orbitals_Hamiltonian_631_paulis_Result.cvdvqasm"
+    },
+    {
+        "input_file": "qubit_hamiltonians/LiH/JW_LiH_sto3g_4_electrons_12_spin_orbitals_Hamiltonian_631_paulis.txt",
+        "output_file": "output/JW_LiH_sto3g_4_electrons_12_spin_orbitals_Hamiltonian_631_paulis_Result.cvdvqasm"
+    },
+    {
+        "input_file": "qubit_hamiltonians/BeH2/BK_BeH2_sto3g_6_electrons_14_spin_orbitals_Hamiltonian_666_paulis.txt",
+        "output_file": "output/BK_BeH2_sto3g_6_electrons_14_spin_orbitals_Hamiltonian_666_paulis_Result.cvdvqasm"
+    },
+    {
+        "input_file": "qubit_hamiltonians/BeH2/JW_BeH2_sto3g_6_electrons_14_spin_orbitals_Hamiltonian_666_paulis.txt",
+        "output_file": "output/JW_BeH2_sto3g_6_electrons_14_spin_orbitals_Hamiltonian_666_paulis_Result.cvdvqasm"
+    },
+    {
+        "input_file": "qubit_hamiltonians/ethylene/BK_ethylene_sto3g_10_electrons_16_spin_orbitals_Hamiltonian_789_paulis.txt",
+        "output_file": "output/BK_ethylene_sto3g_10_electrons_16_spin_orbitals_Hamiltonian_789_paulis_Result.cvdvqasm"
+    },
+    {
+        "input_file": "qubit_hamiltonians/ethylene/JW_ethylene_sto3g_10_electrons_16_spin_orbitals_Hamiltonian_789_paulis.txt",
+        "output_file": "output/JW_ethylene_sto3g_10_electrons_16_spin_orbitals_Hamiltonian_789_paulis_Result.cvdvqasm"
+    },
+    {
+        "input_file": "qubit_hamiltonians/NH3/BK_NH3_sto3g_8_electrons_12_spin_orbitals_Hamiltonian_915_paulis.txt",
+        "output_file": "output/BK_NH3_sto3g_8_electrons_12_spin_orbitals_Hamiltonian_915_paulis_Result.cvdvqasm"
+    },
+    {
+        "input_file": "qubit_hamiltonians/NH3/JW_NH3_sto3g_8_electrons_12_spin_orbitals_Hamiltonian_915_paulis.txt",
+        "output_file": "output/JW_NH3_sto3g_8_electrons_12_spin_orbitals_Hamiltonian_915_paulis_Result.cvdvqasm"
+    },
+    {
+        "input_file": "qubit_hamiltonians/C2/BK_C2_sto3g_10_electrons_16_spin_orbitals_Hamiltonian_1177_paulis.txt",
+        "output_file": "output/BK_C2_sto3g_10_electrons_16_spin_orbitals_Hamiltonian_1177_paulis_Result.cvdvqasm"
+    },
+    {
+        "input_file": "qubit_hamiltonians/C2/JW_C2_sto3g_10_electrons_16_spin_orbitals_Hamiltonian_1177_paulis.txt",
+        "output_file": "output/JW_C2_sto3g_10_electrons_16_spin_orbitals_Hamiltonian_1177_paulis_Result.cvdvqasm"
+    },
+    {
+        "input_file": "qubit_hamiltonians/N2/BK_N2_sto3g_10_electrons_16_spin_orbitals_Hamiltonian_1177_paulis.txt",
+        "output_file": "output/BK_N2_sto3g_10_electrons_16_spin_orbitals_Hamiltonian_1177_paulis_Result.cvdvqasm"
+    },
+    {
+        "input_file": "qubit_hamiltonians/N2/JW_N2_sto3g_10_electrons_16_spin_orbitals_Hamiltonian_1177_paulis.txt",
+        "output_file": "output/JW_N2_sto3g_10_electrons_16_spin_orbitals_Hamiltonian_1177_paulis_Result.cvdvqasm"
+    },
+    {
+        "input_file": "qubit_hamiltonians/H2O/BK_H2O_sto3g_8_electrons_12_spin_orbitals_Hamiltonian_1219_paulis.txt",
+        "output_file": "output/BK_H2O_sto3g_8_electrons_12_spin_orbitals_Hamiltonian_1219_paulis_Result.cvdvqasm"
+    },
+    {
+        "input_file": "qubit_hamiltonians/H2O/JW_H2O_sto3g_8_electrons_12_spin_orbitals_Hamiltonian_1219_paulis.txt",
+        "output_file": "output/JW_H2O_sto3g_8_electrons_12_spin_orbitals_Hamiltonian_1219_paulis_Result.cvdvqasm"
+    },
+    {
+        "input_file": "qubit_hamiltonians/H2O/BK_H2O_sto3g_10_electrons_14_spin_orbitals_Hamiltonian_1654_paulis.txt",
+        "output_file": "output/BK_H2O_sto3g_10_electrons_14_spin_orbitals_Hamiltonian_1654_paulis_Result.cvdvqasm"
+    },
+    {
+        "input_file": "qubit_hamiltonians/H2O/JW_H2O_sto3g_10_electrons_14_spin_orbitals_Hamiltonian_1654_paulis.txt",
+        "output_file": "output/JW_H2O_sto3g_10_electrons_14_spin_orbitals_Hamiltonian_1654_paulis_Result.cvdvqasm"
+    },
+    {
+        "input_file": "qubit_hamiltonians/NH3/BK_NH3_sto3g_8_electrons_14_spin_orbitals_Hamiltonian_1734_paulis.txt",
+        "output_file": "output/BK_NH3_sto3g_8_electrons_14_spin_orbitals_Hamiltonian_1734_paulis_Result.cvdvqasm"
+    },
+    {
+        "input_file": "qubit_hamiltonians/NH3/JW_NH3_sto3g_8_electrons_14_spin_orbitals_Hamiltonian_1734_paulis.txt",
+        "output_file": "output/JW_NH3_sto3g_8_electrons_14_spin_orbitals_Hamiltonian_1734_paulis_Result.cvdvqasm"
+    },
+    {
+        "input_file": "qubit_hamiltonians/C2/BK_C2_sto3g_12_electrons_18_spin_orbitals_Hamiltonian_1884_paulis.txt",
+        "output_file": "output/BK_C2_sto3g_12_electrons_18_spin_orbitals_Hamiltonian_1884_paulis_Result.cvdvqasm"
+    },
+    {
+        "input_file": "qubit_hamiltonians/C2/JW_C2_sto3g_12_electrons_18_spin_orbitals_Hamiltonian_1884_paulis.txt",
+        "output_file": "output/JW_C2_sto3g_12_electrons_18_spin_orbitals_Hamiltonian_1884_paulis_Result.cvdvqasm"
+    }
+]

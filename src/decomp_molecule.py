@@ -6,6 +6,7 @@ import json
 import time
 from src.utils import *
 from src.circ_utils import *
+from src.output_manager import OutputManager
 import src.parser as parser
 import src.graph_mapping as graph_mapping
 from timeit import default_timer as timer
@@ -58,6 +59,9 @@ def run_single(input_file: str, debug_mode: bool, output_override: str = None, s
         else:
             physical_output_path = get_output_path(base_name + f"_{p}_{m}_{q_str}", 'Result')
 
+        if not os.path.exists(os.path.dirname(physical_output_path)):
+            os.makedirs(os.path.dirname(physical_output_path))
+
         mapping_start = time.time()
         out_circ = in_circ.map_to_graph(square_graph, pauli_mapping_order=p,tsp_method=m, qubit_swaps=q)
 
@@ -70,6 +74,10 @@ def run_single(input_file: str, debug_mode: bool, output_override: str = None, s
             out[f"{input_file}_{p}_{m}_{q_str}"]['non_pstring_initial_gate_count'] = non_pauli_count
             out[f"{input_file}_{p}_{m}_{q_str}"]['intermediate_qbit_count'] = intermediate_qbit_count
             out[f"{input_file}_{p}_{m}_{q_str}"]['intermediate_qmode_count'] = intermediate_qmode_count
+            
+            if not os.path.exists(os.path.dirname(stats_file)):
+                os.makedirs(os.path.dirname(stats_file))
+
             fp = open(stats_file, 'w')
             json.dump(out, fp, indent=4)
             fp.close()

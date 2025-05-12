@@ -1,0 +1,1 @@
+exp(prod((-0.78539815j),dagger(b(0)),b(0),dagger(b(0)),b(0)))

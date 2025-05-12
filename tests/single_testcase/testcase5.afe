@@ -1,0 +1,1 @@
+exp(prod((1.5707963j),sum(prod(dagger(b(3)),b(1)),prod(dagger(b(1)),b(3)))))

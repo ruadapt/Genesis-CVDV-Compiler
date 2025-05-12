@@ -1,0 +1,58 @@
+[
+    {
+        "input_file": "benchmark/heisenberg_1.ham",
+        "output_file": "result/heisenberg_1_Result.cvdvqasm"
+    },
+    {
+        "input_file": "benchmark/heisenberg_2.ham",
+        "output_file": "result/heisenberg_2_Result.cvdvqasm"
+    },
+    {
+        "input_file": "benchmark/heisenberg_3.ham",
+        "output_file": "result/heisenberg_3_Result.cvdvqasm"
+    },
+    {
+        "input_file": "benchmark/electronicVibration_1.ham",
+        "output_file": "result/electronicVibration_1_Result.cvdvqasm"
+    },
+    {
+        "input_file": "benchmark/electronicVibration_2.ham",
+        "output_file": "result/electronicVibration_2_Result.cvdvqasm"
+    },
+    {
+        "input_file": "benchmark/electronicVibration_3.ham",
+        "output_file": "result/electronicVibration_3_Result.cvdvqasm"
+    },
+    {
+        "input_file": "benchmark/z2Higgs_1.ham",
+        "output_file": "result/z2Higgs_1_Result.cvdvqasm"
+    },
+    {
+        "input_file": "benchmark/z2Higgs_2.ham",
+        "output_file": "result/z2Higgs_2_Result.cvdvqasm"
+    },
+    {
+        "input_file": "benchmark/z2Higgs_3.ham",
+        "output_file": "result/z2Higgs_3_Result.cvdvqasm"
+    },
+    {
+        "input_file": "benchmark/boseHubbard_1.ham",
+        "output_file": "result/boseHubbard_1_Result.cvdvqasm"
+    },
+    {
+        "input_file": "benchmark/boseHubbard_2.ham",
+        "output_file": "result/boseHubbard_2_Result.cvdvqasm"
+    },
+    {
+        "input_file": "benchmark/boseHubbard_3.ham",
+        "output_file": "result/boseHubbard_3_Result.cvdvqasm"
+    },
+    {
+        "input_file": "benchmark/hubbardHolstein_1.ham",
+        "output_file": "result/hubbardHolstein_1_Result.cvdvqasm"
+    },
+    {
+        "input_file": "benchmark/kerr_1.ham",
+        "output_file": "result/kerr_1_Result.cvdvqasm"
+    }
+]

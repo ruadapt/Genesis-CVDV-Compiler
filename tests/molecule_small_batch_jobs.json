@@ -1,0 +1,10 @@
+[
+    {
+        "input_file": "qubit_hamiltonians/LiH/BK_LiH_sto3g_4_electrons_12_spin_orbitals_Hamiltonian_631_paulis.txt",
+        "output_file": "output/small_molecule_benchmark/BK_LiH_sto3g_4_electrons_12_spin_orbitals_Hamiltonian_631_paulis_Result.cvdvqasm"
+    },
+    {
+        "input_file": "qubit_hamiltonians/LiH/JW_LiH_sto3g_4_electrons_12_spin_orbitals_Hamiltonian_631_paulis.txt",
+        "output_file": "output/small_molecule_benchmark/JW_LiH_sto3g_4_electrons_12_spin_orbitals_Hamiltonian_631_paulis_Result.cvdvqasm"
+    }
+]

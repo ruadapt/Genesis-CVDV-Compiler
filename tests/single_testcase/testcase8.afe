@@ -1,0 +1,1 @@
+exp(prod((-0.5j),sigma(3, 0),sum(b(0),dagger(b(0)))))
