@@ -223,11 +223,11 @@ class PauliNode(Node):
         out = Circuit(list(sorted(set(path + all_phys_qubits))))
         for log,phys in [(q,mapping.get_physical_from_log(q)) for q in this.wires if q[0]=='q' and q[1] < len(this.pauli_string) and this.pauli_string[q[1]] != 'I']:
             pauli_gate = this.pauli_string[log[1]]
+            if pauli_gate == 'Y':
+                out.append_node(Gate("sdg", [('q',phys[1])]))
             if pauli_gate in ('X','Y'):
-                out.append_node(Gate("h", [('q',phys[1])]))
-                if pauli_gate == 'Y':
-                    out.append_node(Gate("sdg", [('q',phys[1])]))
-
+                out.append_node(Gate("h", [('q',phys[1])]))   
+            
         #TODO put work here
         ancilla = path[0]
         def make_parity_path(is_reversed:bool = False):
@@ -257,10 +257,11 @@ class PauliNode(Node):
 
         for log,phys in [(q,mapping.get_physical_from_log(q)) for q in this.wires if q[0]=='q' and q[1] < len(this.pauli_string) and this.pauli_string[q[1]] != 'I']:
             pauli_gate = this.pauli_string[log[1]]
-            if pauli_gate == 'Y':
-                out.append_node(Gate("s", [('q',phys[1])]))
             if pauli_gate in ('X','Y'):
-                out.append_node(Gate("h", [('q',phys[1])]))     
+                out.append_node(Gate("h", [('q',phys[1])]))
+                if pauli_gate == 'Y':
+                    out.append_node(Gate("s", [('q',phys[1])]))
+  
 
         return out
 
