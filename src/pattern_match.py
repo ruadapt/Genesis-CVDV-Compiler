@@ -1102,7 +1102,7 @@ def __make_seq(pstring:str, qmode:ParsedNode, rev:bool = False):
         elif c == 'X':
             rotation_full = [parse_str(f"qgate(h, {i})")] + rotation + [parse_str(f"qgate(h, {i})")]
         elif c == 'Y':
-            rotation_full = [parse_str(f"qgate(h, {i})"), parse_str(f"qgate(sdg, {i})")] + rotation + [parse_str(f"qgate(s, {i})"), parse_str(f"qgate(h, {i})")]
+            rotation_full = [parse_str(f"qgate(sdg, {i})"), parse_str(f"qgate(h, {i})")] + rotation + [parse_str(f"qgate(h, {i})"), parse_str(f"qgate(s, {i})")]
         elif c == 'Z':
             rotation_full = rotation
         else:
@@ -1123,10 +1123,10 @@ sigma_z_rules = [
     Rule(parse_str('exp(prod(sigma(1, qb1), ?2))'), ['?2', 'qb1'], parse_str('prod(qgate(h, qb1), exp(prod(sigma(3, qb1) ?2)), qgate(h, qb1),)')),
     Rule(parse_str('exp(prod(sigma(1, qb1)))'), ['qb1'], parse_str('prod(qgate(h, qb1), exp(prod( sigma(3, qb1) )), qgate(h, qb1),)')),
 
-    Rule(parse_str('exp(prod(?1, sigma(2, qb1), ?2))'), ['?1', '?2', 'qb1'], parse_str('prod(qgate(h, qb1), qgate(sdg, qb1), exp(prod(?1, sigma(3, qb1), ?2)), qgate(s, qb1), qgate(h, qb1),)')),
-    Rule(parse_str('exp(prod(?1, sigma(2, qb1)))'), ['?1', 'qb1'], parse_str('prod(qgate(h, qb1), qgate(sdg, qb1), exp(prod(?1, sigma(3, qb1))), qgate(s, qb1), qgate(h, qb1),)')),
-    Rule(parse_str('exp(prod(sigma(2, qb1), ?2))'), ['?2', 'qb1'], parse_str('prod(qgate(h, qb1), qgate(sdg, qb1), exp(prod(sigma(3, qb1) ?2)), qgate(s, qb1), qgate(h, qb1),)')),
-    Rule(parse_str('exp(prod(sigma(2, qb1)))'), ['qb1'], parse_str('prod(qgate(h, qb1), qgate(sdg, qb1), exp(prod( sigma(3, qb1) )), qgate(s, qb1), qgate(h, qb1),)')),
+    Rule(parse_str('exp(prod(?1, sigma(2, qb1), ?2))'), ['?1', '?2', 'qb1'], parse_str('prod(qgate(sdg, qb1), qgate(h, qb1), exp(prod(?1, sigma(3, qb1), ?2)), qgate(h, qb1), qgate(s, qb1),)')),
+    Rule(parse_str('exp(prod(?1, sigma(2, qb1)))'), ['?1', 'qb1'], parse_str('prod(qgate(sdg, qb1), qgate(h, qb1), exp(prod(?1, sigma(3, qb1))), qgate(h, qb1), qgate(s, qb1),)')),
+    Rule(parse_str('exp(prod(sigma(2, qb1), ?2))'), ['?2', 'qb1'], parse_str('prod(qgate(sdg, qb1), qgate(h, qb1), exp(prod(sigma(3, qb1) ?2)), qgate(h, qb1), qgate(s, qb1))')),
+    Rule(parse_str('exp(prod(sigma(2, qb1)))'), ['qb1'], parse_str('prod(qgate(sdg, qb1), qgate(h, qb1), exp(prod( sigma(3, qb1) )), qgate(h, qb1), qgate(s, qb1))')),
 
     Rule(
         parse_str('exp(prod(?t, paulistring(?ps), sum(prod(?alpha, dagger(?1)), prod(?alphac, ?1))))'),
@@ -1417,8 +1417,8 @@ basic_gates_list = [
     Rule(parse_str('exp( prod(?a, BOD(M, qb1)) )'),
         ['?a','M', 'qb1'],
         #exp(𝑖(𝜋/2)𝑎†𝑎)exp(𝑖(𝛼 (𝑎† + 𝑎)) ⊗ 𝜎𝑦)exp(−𝑖(𝜋/2)𝑎†𝑎)exp(𝑖(𝛼 (𝑎† + 𝑎)) ⊗ 𝜎𝑥 )
-        #R(-pi/2)h()sdg()CD(j alpha)s()h()R(pi/2)h()CD(j alpha)h()
-        parse_str(f'prod(qgate(R({-math.pi/2}), M), qgate(h, qb1), qgate(sdg, qb1), qgate(CD(?alphai), qb1, M), qgate(s, qb1), qgate(h, qb1), qgate(R({math.pi/2}), M), qgate(h, qb1), qgate(CD(?alphai), qb1, M), qgate(h, qb1))'),
+        #R(-pi/2)sdg()h()CD(j alpha)h()s()R(pi/2)h()CD(j alpha)h()
+        parse_str(f'prod(qgate(R({-math.pi/2}), M), qgate(sdg, qb1), qgate(h, qb1), qgate(CD(?alphai), qb1, M), qgate(h, qb1), qgate(s, qb1), qgate(R({math.pi/2}), M), qgate(h, qb1), qgate(CD(?alphai), qb1, M), qgate(h, qb1))'),
         #parse_str('prod( qgate(h), qgate(CD(-1j)), qgate(h), qgate(R(pi/2)), qgate(h), qgate(sdg), qgate(CD(j)), qgate(s), qgate(h),  qgate(R(-pi/2)))'),
         lambda x: (__is_mode(x['M']) and
             _is_const(x['?a'])
@@ -1429,7 +1429,7 @@ basic_gates_list = [
     Rule(parse_str('exp( prod(?a, BOD(dagger(M), qb1)) )'),
         ['?a','M', 'qb1'],
         #parse_str( 'prod( qgate(h), qgate(CD(i)), qgate(h), qgate(R(pi/2)), qgate(h), qgate(sdg), qgate(CD(i)), qgate(s), qgate(h),  qgate(R(-pi/2)))'  ),
-        parse_str(f'prod(qgate(R({-math.pi/2}), M), qgate(h, qb1), qgate(sdg, qb1), qgate(CD(?alphai), qb1, M), qgate(s, qb1), qgate(h, qb1), qgate(R({math.pi/2}), qb1, M), qgate(h, qb1), qgate(CD(nsign(?alphai)), qb1, M), qgate(h, qb1))'),
+        parse_str(f'prod(qgate(R({-math.pi/2}), M), qgate(sdg, qb1), qgate(h, qb1), qgate(CD(?alphai), qb1, M), qgate(h, qb1), qgate(s, qb1), qgate(R({math.pi/2}), qb1, M), qgate(h, qb1), qgate(CD(nsign(?alphai)), qb1, M), qgate(h, qb1))'),
         lambda x: (__is_mode(x['M']) and
             _is_const(x['?a'])
             and (complex(x['?a'].name)/ (2j) == complex.conjugate(complex(x['?a'].name)/ (2j)))
