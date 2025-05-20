@@ -143,7 +143,7 @@ $$
 
 1. First, we define the constants and ranges.
 2. Then, we assign the result as a sum of terms, use four `Sum_over` to accumulate the terms.
-3. Each term is a product of operators, 
+3. Each term is a product of operators,
     1. `-t * Sum_over(i, j, sigma){FC[i][sigma] * FA[j][sigma]}` represents two fermionic operators.
     2. `U * Sum_over(i){FN[i][1] * FN[i][0]}` represents two fermionic number operators.
     3. `Sum_over(i){BC[i] * BA[i]}` represents two bosonic operators.

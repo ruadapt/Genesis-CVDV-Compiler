@@ -1,6 +1,6 @@
 # Genesis: A Compiler Framework for Hamiltonian Simulation on Hybrid CV-DV Quantum Computers
 
-Genesis is a compiler framework for Hamiltonian simulation targeting hybrid continuous-variable (CV) and discrete-variable (DV) quantum systems. It supports multi-level compilation, Hybrid CV-DV domain-specific language (DSL), and hardware circuit mapping and routing. 
+Genesis is a compiler framework for Hamiltonian simulation targeting hybrid continuous-variable (CV) and discrete-variable (DV) quantum systems. It supports multi-level compilation, Hybrid CV-DV domain-specific language (DSL), and hardware circuit mapping and routing.
 
 ![Flowchart](doc/flowchart.png)
 
@@ -19,8 +19,8 @@ Genesis is a compiler framework for Hamiltonian simulation targeting hybrid cont
 
 ### Prerequisites
 
-* Python ≥ 3.8
-* Java (for [ANTLR](https://www.antlr.org/))
+- Python ≥ 3.8
+- Java (for [ANTLR](https://www.antlr.org/))
 
 We recommend using a Python virtual environment:
 
@@ -63,9 +63,9 @@ Benchmark Hamiltonians (`*.ham`) are provided in the `benchmark/` directory. To 
 
 Genesis supports:
 
-* **Single-file mode**
-* **Batch JSON mode**
-* Optional modes: `--debug`, `--stats`, and `--clean`
+- **Single-file mode**
+- **Batch JSON mode**
+- Optional modes: `--debug`, `--stats`, and `--clean`
 
 ### Single File
 
@@ -96,9 +96,9 @@ Example `small_batch_jobs.json`:
 
 ### Optional Flags
 
-* `--debug`: Adds debug comments in output `.cvdvqasm` files
-* `--stats`: Generates a JSON report of compilation statistics
-* `--clean`: Removes intermediate files
+- `--debug`: Adds debug comments in output `.cvdvqasm` files
+- `--stats`: Generates a JSON report of compilation statistics
+- `--clean`: Removes intermediate files
 
 ## 🧩 Intermediate Tools
 
@@ -123,6 +123,7 @@ The output will be saved in `output/output.log`, `0` is the index of the potenti
 ### Pattern Matching and Mapping test cases
 
 Smaller test cases involving pattern matching and mapping can be ran by the commands below:
+
 ```shell
 python3 -m tests.single_testcase.test_single_testcase > tests/single_testcase/test_single_testcase_outlog.txt
 ```
@@ -164,12 +165,12 @@ A comprehensive set of demonstration usage examples and general benchmark evalua
 
 ## 📬 Contact
 
-* Eddy Z. Zhang — eddyzhengzhang \[at] gmail\.com
-* Zihan Chen — zihan.chen.cs \[at] rutgers\.edu
-* Henry Chen — hc867 \[at] scarletmail\.rutgers\.edu
+- Eddy Z. Zhang — eddyzhengzhang \[at] gmail\.com
+- Zihan Chen — zihan.chen.cs \[at] rutgers\.edu
+- Henry Chen — hc867 \[at] scarletmail\.rutgers\.edu
 
 ## 📖 Citation
 
 > Zihan Chen, Jiakang Li, Minghao Guo, Henry Chen, Zirui Li, Joel Bierman, Yipeng Huang, Huiyang Zhou, Yuan Liu, and Eddy Z. Zhang.
 > *Genesis: A Compiler Framework for Hamiltonian Simulation on Hybrid CV-DV Quantum Computers*.
-> In *Proceedings of the 52nd Annual International Symposium on Computer Architecture (ISCA ’25)*, June 21–25, 2025, Tokyo, Japan.
+> In *Proceedings of the 52nd Annual International Symposium on Computer Architecture (ISCA '25)*, June 21-25, 2025, Tokyo, Japan.
