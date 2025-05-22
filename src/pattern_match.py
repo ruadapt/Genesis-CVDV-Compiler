@@ -681,7 +681,7 @@ def simplify_ops(node:ParsedNode):
                     new_children.extend(c.children)
                 elif node.name in assoc_op_id.keys() and c == assoc_op_id[node.name]:
                     pass
-                elif len(new_children) > 0 and __is_complex(c) and __is_complex(new_children[-1]):
+                elif len(new_children) > 0 and __is_const(c) and __is_const(new_children[-1]):
                     out_c = complex(new_children.pop().name)
                     if node.name == 'prod':
                         new_children.append(ParsedNode(f"{out_c * complex(c.name)}"))
@@ -691,6 +691,10 @@ def simplify_ops(node:ParsedNode):
                 else:
                     new_children.append(c)
             node.children = new_children
+
+
+            if node.name in assoc_op_id.keys() and len(node.children) == 0:
+                node.name = assoc_op_id[node.name].name
 
         if len(node.children) == 1 and node.name in assoc_ops:
             node.name = node.children[0].name
@@ -702,6 +706,17 @@ def simplify_ops(node:ParsedNode):
 def __is_complex(val):
     try:
         complex(val)
+        return True
+    except ValueError:
+        return False
+    except TypeError:
+        return False
+
+def __is_const(node:ParsedNode):
+    if node.name in ('nsign', 'sum', 'prod', 'complex'):
+        return all(__is_const(c) for c in node.children)
+    try:
+        complex(node.name)
         return True
     except ValueError:
         return False
