@@ -207,7 +207,7 @@ def math_str_to_float(math_str):
                 ptr += 1
                 nesting = 1
                 if ptr >= len(math_str):
-                    raise Exception("Parsing Error")
+                    raise Exception(f"Parsing Error : {math_str}")
                 c2:str = math_str[ptr]
                 if c2 == '(':
                     nesting += 1
@@ -222,7 +222,7 @@ def math_str_to_float(math_str):
                     tokens.append(("num", utils.PiAngle(1)))
                     ptr += 1
                 else:
-                    raise Exception("Parsing Error")
+                    raise Exception(f"Parsing Error : {math_str}")
             elif c in "1234567890.":
                 start_ptr = ptr
                 while ptr < len(math_str)-1 and math_str[ptr+1] in "1234567890.":
