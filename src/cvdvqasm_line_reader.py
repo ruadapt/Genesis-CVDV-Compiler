@@ -3,7 +3,7 @@
 from src.output_manager import OutputManager
 import os
 import warnings
-import src.pattern_match as pattern_match
+import src.pattern_match_apply as pattern_match_apply
 
 
 class CVDVQASMLineReader:
@@ -73,7 +73,7 @@ class CVDVQASMLineReader:
         _, input_line = line.split(maxsplit=1)
         input_line = input_line.strip(";")
         
-        output = pattern_match.main(input_line, self.qubit_count)
+        output = pattern_match_apply.main(input_line, self.qubit_count)
         if output == None:
             if self.is_print_debug_comments:
                 self.output_manager.add_comment(f"Line {line_number}: pattern {input_line} not matched, ")

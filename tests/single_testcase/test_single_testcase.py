@@ -1,7 +1,7 @@
 # Run this file from the folder containing 'tests', as following:
 # python3 -m tests.single_testcase.test_single_testcase > tests/single_testcase/test_single_testcase_outlog.txt
 
-import src.pattern_match as pattern_match, src.parser as parser, src.graph_mapping as graph_mapping
+import src.pattern_match_apply as pattern_match_apply, src.parser as parser, src.graph_mapping as graph_mapping
 from timeit import default_timer as timer
 import math
 
@@ -20,7 +20,7 @@ for i in range(1,12):
 
     print(in_str)
     start_time = timer()
-    out_env, out_list, rule_hits = pattern_match.main(in_str, 0, write_ruleslist="tests/single_testcase/ruleslist.txt")
+    out_env, out_list, rule_hits = pattern_match_apply.main(in_str, 0, write_ruleslist="tests/single_testcase/ruleslist.txt")
     print(rule_hits)
 
     fp2 = open(out_file_path, 'w')
