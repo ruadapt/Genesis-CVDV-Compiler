@@ -7,6 +7,7 @@ This document specifies the **Hamiltonian Domain-Specific Language (H-DSL)** imp
 ```c
 Const t = 1;
 Const U = 1;
+Const g = 1;
 
 Range i = [0, 10, 1];
 Range j = [0, 10, 1];
