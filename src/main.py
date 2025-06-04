@@ -56,7 +56,7 @@ def run_single(input_file: str, debug_mode: bool, output_override: str = None, s
 
             # Step0.5: Prepare the intermediate cvdvqasm file
             # Determine output path: override via JSON or default naming
-            if output_override:
+            if output_override is not None:
                 intermediate_output_path = insert_prefix(output_override, "intermediate_")
             else:
                 intermediate_output_path = insert_prefix(get_output_path(base_name, identifier, count), "intermediate_")
@@ -70,7 +70,7 @@ def run_single(input_file: str, debug_mode: bool, output_override: str = None, s
             interpreter.interpret(ast_root, identifier)
             
             # Step1.5: Prepare the logical cvdvqasm file
-            if output_override:
+            if output_override is not None:
                 logical_output_path = insert_prefix(output_override, "logical_")
             else:
                 logical_output_path = insert_prefix(get_output_path(base_name, identifier, count), "logical_")
@@ -84,7 +84,7 @@ def run_single(input_file: str, debug_mode: bool, output_override: str = None, s
             line_reader.run()
             
             # Step2.5: Prepare the physical cvdvqasm file
-            if output_override:
+            if output_override is not None:
                 physical_output_path = output_override
             else:
                 physical_output_path = get_output_path(base_name, identifier, count)
@@ -189,10 +189,17 @@ def main():
     i = 1
     for job in jobs:
         print(f"\nProcessing job {i} of {len(jobs)}")
-        in_file = job.get("input_file")
+        input_file = job.get("input_file")
         dbg = args.debug
         out_override = job.get("output_file")
-        run_single(in_file, dbg, out_override, stats_mode, stats_file, clean_mode)
+        if not is_a_valid_file_path_format(input_file):
+            print(f"Invalid input file format: {input_file}")
+            continue
+        if out_override is not None and not is_a_valid_file_path_format(out_override):
+            print(f"Invalid output file format: {out_override}")
+            continue
+        
+        run_single(input_file, dbg, out_override, stats_mode, stats_file, clean_mode)
         i += 1
 
     end_time = time.time()
