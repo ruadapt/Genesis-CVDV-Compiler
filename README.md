@@ -73,6 +73,12 @@ Genesis supports:
 python3 -m src.main benchmark/electronicVibration_small.ham
 ```
 
+The output file will be defaulted to the same name as the input file, with a `.cvdvqasm` extension in `output/` directory. You can also use `-o` or `--output` to specify the output file path.
+
+```shell
+python3 -m src.main benchmark/electronicVibration_small.ham -o output/electronicVibration_small.cvdvqasm
+```
+
 ### Batch Mode
 
 ```shell

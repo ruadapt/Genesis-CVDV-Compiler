@@ -160,6 +160,7 @@ def main():
     )
     # Positional input for single-file mode
     parser.add_argument("input_file", nargs="?", help="Path to a single input file")
+    parser.add_argument("-o", "--output", help="Output file path")
     # JSON batch file for multiple jobs
     parser.add_argument("--batch-json", help="Path to a JSON file listing batch jobs")
     parser.add_argument("--debug", action="store_true", help="Enable debug comments")
@@ -198,6 +199,8 @@ def main():
         if out_override is not None and not is_a_valid_file_path_format(out_override):
             print(f"Invalid output file format: {out_override}")
             continue
+        if out_override is None and args.output is not None:
+            out_override = args.output
         
         run_single(input_file, dbg, out_override, stats_mode, stats_file, clean_mode)
         i += 1
