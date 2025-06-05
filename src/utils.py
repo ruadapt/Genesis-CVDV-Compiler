@@ -3,6 +3,7 @@
 import os
 import logging
 import atexit
+from typing import Union
 from antlr4 import FileStream, CommonTokenStream
 from generated.hamiltonianDSLLexer import hamiltonianDSLLexer
 from generated.hamiltonianDSLParser import hamiltonianDSLParser
@@ -77,16 +78,42 @@ def get_output_path(input_file_name, base_name, counter=None):
     return os.path.join(output_dir, f"{base_name}({counter}).cvdvqasm")
 
 
-def insert_prefix(output_path, prefix) -> str:
+def is_a_valid_file_path_format(output_path: Union[str, os.PathLike]) -> bool:
     """
-    Insert a prefix to the output file path, if it is not a file, return the original path.
+    Check whether a given path is a syntactically valid file path.
     """
-    is_a_file = os.path.isfile(output_path)
-    if is_a_file:
-        return os.path.join(os.path.dirname(output_path), prefix + os.path.basename(output_path))
+    path = str(output_path).strip()
+    if not path:
+        return False
+
+    base = os.path.basename(path).strip()
+    if not base:
+        return False  # likely a directory path (ends with slash)
+
+    return True
+
+
+def insert_prefix(output_path: Union[str, os.PathLike], prefix: str) -> str:
+    """
+    Insert a prefix to the file name in the output path.
+    
+    If the output_path refers to a file, this function prepends `prefix` to the file name.
+    If it does not appear to be a file (e.g., ends with a slash), the original path is returned.
+    
+    Args:
+        output_path (str or PathLike): The original file path.
+        prefix (str): The prefix string to insert before the file name.
+    
+    Returns:
+        str: The updated path with the prefixed file name, or the original path if not a file.
+    """
+    output_path = str(output_path)
+    if os.path.basename(output_path):  # Only apply if it looks like a file path
+        dir_name = os.path.dirname(output_path)
+        base_name = os.path.basename(output_path)
+        return os.path.join(dir_name, prefix + base_name)
     else:
         return output_path
-
 
 def reconfigure_logger_for_input(input_file):
     """
