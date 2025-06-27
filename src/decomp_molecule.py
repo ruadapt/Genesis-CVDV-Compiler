@@ -8,7 +8,6 @@ from src.utils import *
 from src.circ_utils import *
 from src.output_manager import OutputManager
 import src.parser as parser
-import src.graph_mapping as graph_mapping
 from timeit import default_timer as timer
 
 __algorithm_settings = [
@@ -48,7 +47,7 @@ def run_single(input_file: str, debug_mode: bool, output_override: str = None, s
         intermediate_qmode_count = max(qm_wires) + 1 if qm_wires else 0
 
     square_len = math.ceil(math.sqrt(max([l for _,l in in_circ.wires])+1))
-    square_graph = graph_mapping.make_rectangle_graph(square_len, square_len)
+    square_graph = make_rectangle_graph(square_len, square_len)
 
     for p,m,q in __algorithm_settings:
         q_str = 'qbmov' if q else 'qbstuck'

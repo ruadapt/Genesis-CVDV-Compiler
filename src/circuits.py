@@ -1,13 +1,9 @@
+# src.circuits
+
 from typing_extensions import Self, Any, Literal #For annotations only
 import math
 import src.circ_utils as circ_utils
 from collections import deque, defaultdict
-import numpy as np
-import queue
-import functools
-import copy
-
-import src.graph_mapping as graph_mapping
 import networkx as nx
 
 wire_t = circ_utils.wire_t
@@ -195,7 +191,7 @@ class PauliNode(Node):
         this.displacement = displacement
         this.nodeType = "pauliNode"
 
-    def map_to_coupling_graph(this, mapping:graph_mapping.Mapping, tsp_method:tsp_t = 'christofides'):
+    def map_to_coupling_graph(this, mapping:circ_utils.Mapping, tsp_method:tsp_t = 'christofides'):
         #print(this)
         all_phys_qubits = [ mapping.get_physical_from_log(q) for q in this.wires if q[0]=='q' and q[1] < len(this.pauli_string) and this.pauli_string[q[1]] != 'I']
         phys_qumodes = [('qm',q[1]) for q in all_phys_qubits]
@@ -501,7 +497,7 @@ class Circuit:
     def map_to_graph(this, c_graph:nx.Graph, pauli_mapping_order:pmo_t = 'naive', tsp_method:tsp_t = 'christofides', qubit_swaps:bool = True):     
         if len(this.wires) > len(c_graph.nodes):
             raise Exception("hardware graph too small")
-        current_mapping = graph_mapping.Mapping(c_graph)
+        current_mapping = circ_utils.Mapping(c_graph)
 
         #currently just index mapping
         for w in this.wires:

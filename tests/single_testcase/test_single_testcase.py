@@ -1,9 +1,10 @@
 # Run this file from the folder containing 'tests', as following:
 # python3 -m tests.single_testcase.test_single_testcase > tests/single_testcase/test_single_testcase_outlog.txt
 
-import src.pattern_match_apply as pattern_match_apply, src.parser as parser, src.graph_mapping as graph_mapping
+import src.pattern_match_apply as pattern_match_apply, src.parser as parser
 from timeit import default_timer as timer
 import math
+from src.circ_utils import make_rectangle_graph
 
 for i in range(1,12):
     in_file_path = f"tests/single_testcase/testcase{i}.afe"
@@ -36,7 +37,7 @@ for i in range(1,12):
     #print(in_circ.wires)
 
     square_len = math.ceil(math.sqrt(max([l for _,l in in_circ.wires])+1))
-    square_graph = graph_mapping.make_rectangle_graph(square_len, square_len)
+    square_graph = make_rectangle_graph(square_len, square_len)
     for p in ('depth_sum',):
         for m in ('simulated_annealing_tsp',):
             for q in (False,):

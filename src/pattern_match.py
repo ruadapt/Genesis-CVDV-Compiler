@@ -1,20 +1,15 @@
+# src.pattern_match
+
 from __future__ import annotations
 from copy import deepcopy, copy
 import re, math
 from typing_extensions import Callable
 from collections import Counter, defaultdict
-
-from timeit import default_timer as timer
-
-#import matplotlib.pyplot as plt 
-#import networkx as nx 
-
-#from treelib import Node, Tree
-
 import sys
+from typing import Final, Optional
 
-assoc_ops = ('sum', 'prod', 'tprod')
-#assoc_ops = ()
+ASSOCIATIVE_OPS: Final[frozenset[str]] = frozenset({'sum', 'prod', 'tprod'})
+
 
 def process_word(word:str, stack:list[ParsedNode]):
     word = word.strip()
@@ -27,6 +22,7 @@ def process_word(word:str, stack:list[ParsedNode]):
         op = word[-1]
         word = word[0:-1].strip()
     
+    # if word is valid token, build a node and add it to the stack
     new_node = None
     if word != '':
         new_node = ParsedNode(word)
@@ -54,9 +50,10 @@ def parse_str(string:str):
     if len(out.children) == 1:
         return out.children[0]
     
-    raise Exception("")
+    raise Exception("multiple top-level expressions(multiple ASTs)")
     return tuple(out.children)
 
+# Deprecated
 def parse_file(filename:str):
     out = ParsedNode('root')
     stack = [out]
@@ -77,16 +74,15 @@ def parse_file(filename:str):
 
 
 class ParsedNode():
-    def __init__(self, name:str, children:list[ParsedNode]=[], type:str='op'):
+    def __init__(self, name:str, children:Optional[list[ParsedNode]]=None, node_type:str='op'):
         self.name = str(name)
-        self.type = type
-        self.children = copy(children)
+        self.type = node_type
+        self.children = copy(children) if children else []
 
     def apply_rule(self, rule:Rule, env:StateEnv = None):
         pattern_list = self.locate_rule_match(rule)
         out_list:list[ParsedNode] = []
-        if env == None:
-            env = StateEnv()
+        if env is None: env = StateEnv()
 
         for target_pattern in pattern_list:
             #print(rule, target_pattern)
@@ -127,12 +123,16 @@ class ParsedNode():
 
         #print(prepared_input, prepared_output)
         self.replace_node(prepared_input, prepared_output, index_offset)
-        pass
+        #pass
 
-    def __match_template(self:ParsedNode, target:ParsedNode, 
-                         params:dict[str, ParsedNode]={}, 
-                         index_range:tuple[int,int]|None=None, 
-                         must_match_whole=False) -> list[tuple[ParsedNode, tuple[int, int], dict[str, ParsedNode]]]:
+    def __match_template(
+        self:ParsedNode, 
+        target:ParsedNode, 
+        params:dict[str, ParsedNode]={}, 
+        index_range:tuple[int,int]|None=None, 
+        must_match_whole:bool=False
+    ) -> list[tuple[ParsedNode, tuple[int, int], dict[str, ParsedNode]]]:
+        
         out_list:list[tuple[ParsedNode, tuple[int,int], dict[str, ParsedNode]]] = []
         loc_params = deepcopy(params)
         if index_range == None:
@@ -144,7 +144,7 @@ class ParsedNode():
                 raise Exception("Improper rule format")
 
             if loc_params[target.name] == None:
-                if self.name in assoc_ops and not must_match_whole:
+                if self.name in ASSOCIATIVE_OPS and not must_match_whole:
                     start = index_range[0]
                     if self.name in assoc_op_id.keys():
                         loc_loc_params = loc_params.copy()
@@ -157,35 +157,38 @@ class ParsedNode():
                     return out_list
                 else:
                     loc_params[target.name] = self
-                    return [(self, index_range, loc_params)]
+                    out_list.append((self, index_range, loc_params))
+                    return out_list
             elif self == loc_params[target.name]:
-                return [(self, index_range, loc_params)]
-            elif loc_params[target.name] != None and self.name in assoc_ops and not must_match_whole:
+                out_list.append((self, index_range, loc_params))
+                return out_list
+            elif loc_params[target.name] != None and self.name in ASSOCIATIVE_OPS and not must_match_whole:
                 raise Exception("Case currently not supported (and shouldn't be needed anytime soon)")
             else:
-                return []
+                return out_list
+        
         elif target.name in assoc_op_id.keys() and self.name != target.name:
-            
             #print("???", self, "<-->", target)
             if len(target.children) != 2:
-                return []
+                return out_list
             if target.children[0].name not in loc_params.keys() and target.children[0].name != assoc_op_id[target.name]:
-                return []
+                return out_list
             if loc_params[target.children[0].name] != assoc_op_id[target.name] and loc_params[target.children[0].name] != None:
-                return []
+                return out_list
             if len(target.children[0].children) > 0:
-                return []
+                return out_list
             
             loc_params[target.children[0].name] = assoc_op_id[target.name]
 
             out_data = self.__match_template(target.children[1], loc_params, must_match_whole=True)
 
-            return [(self, index_range, params) for _,_,params in out_data]
+            out_list.extend([(self, index_range, params) for _,_,params in out_data])
+            return out_list
             
         elif self.name != target.name:
-            return []
-        elif self.name in assoc_ops:
-            
+            return out_list
+        
+        elif self.name in ASSOCIATIVE_OPS: 
             out_ptr_list = [(index_range[0],loc_params)]
             is_first = True
             for n in target.children:
@@ -247,7 +250,6 @@ class ParsedNode():
                 if out_list == []:
                     break
 
-
         #print('outlist:', self, out_list)
         return out_list
 
@@ -257,7 +259,7 @@ class ParsedNode():
         
         params_dict = dict((k, None) for k in params)
 
-        if self.name not in assoc_ops:
+        if self.name not in ASSOCIATIVE_OPS:
             curr_outs = self.__match_template(target, params_dict.copy(), index_range)
             out_list.extend(curr_outs)
         else:
@@ -296,7 +298,7 @@ class ParsedNode():
             self.name = replace_with.name
             self.children = deepcopy(replace_with.children)
             self.type = replace_with.type
-        elif self.name == replace_target.name and self.name in assoc_ops:
+        elif self.name == replace_target.name and self.name in ASSOCIATIVE_OPS:
             new_children = self.children[0:index_offset]
 
             l = index_offset
@@ -327,7 +329,7 @@ class ParsedNode():
             self.children = deepcopy(replace_with.children)
             self.type = replace_with.type
         else:
-            if self.name == replace_target.name and self.name in assoc_ops:
+            if self.name == replace_target.name and self.name in ASSOCIATIVE_OPS:
                 new_children = []
 
                 l = index_offset
@@ -604,7 +606,6 @@ def apply_rules_list_full_search(target_node:ParsedNode, recursive_rules_list:li
 
             #print("`"*loc_env.layer, [i[0].history[-1][0] for i in buffer])
 
-
     debug_level -= 1
     return valid_result, out_res, rule_counts
 
@@ -674,7 +675,7 @@ def simplify_ops(node:ParsedNode):
                     pass
 
 
-        if node.name in assoc_ops:
+        if node.name in ASSOCIATIVE_OPS:
             new_children:list[ParsedNode] = []
             for c in node.children:
                 if c.name == node.name:
@@ -696,7 +697,7 @@ def simplify_ops(node:ParsedNode):
             if node.name in assoc_op_id.keys() and len(node.children) == 0:
                 node.name = assoc_op_id[node.name].name
 
-        if len(node.children) == 1 and node.name in assoc_ops:
+        if len(node.children) == 1 and node.name in ASSOCIATIVE_OPS:
             node.name = node.children[0].name
             node.children = node.children[0].children
 

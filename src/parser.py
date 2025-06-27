@@ -1,5 +1,4 @@
 import src.circuits as circuits
-import src.graph_mapping as graph_mapping
 import src.circ_utils as utils
 from typing import Any
 from collections import deque

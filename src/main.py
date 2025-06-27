@@ -1,8 +1,6 @@
 # src.main
-# python3 -m src.main --batch-json small_batch_jobs.json
-import sys
+
 import os
-import logging
 import argparse
 import json
 import time
@@ -15,10 +13,7 @@ from src.output_manager import OutputManager
 from src.interpreter import Interpreter
 from src.cvdvqasm_line_reader import CVDVQASMLineReader
 import src.parser as parser
-import src.circuits as circuits
-import src.graph_mapping as graph_mapping
-import json, os
-from timeit import default_timer as timer
+
 
 def run_single(input_file: str, debug_mode: bool, output_override: str = None, stats_mode: bool = False, stats_file: str = "compilation_stats.json", clean_mode: bool = False) -> None:
     """
@@ -114,7 +109,7 @@ def run_single(input_file: str, debug_mode: bool, output_override: str = None, s
                 intermediate_qmode_count = max(qm_wires) + 1 if qm_wires else 0
 
             square_len = math.ceil(math.sqrt(max([l for _,l in in_circ.wires])+1))
-            square_graph = graph_mapping.make_rectangle_graph(square_len, square_len)
+            square_graph = make_rectangle_graph(square_len, square_len)
             for p in ('depth_sum',):
                 for m in ('simulated_annealing_tsp',):
                     for q in (False,):

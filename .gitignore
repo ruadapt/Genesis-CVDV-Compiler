@@ -4,3 +4,7 @@ __pycache__
 .antlr
 *.log
 .venv
+# ignore the output directory
+output
+# ignore the json files under the root directory
+/*.json

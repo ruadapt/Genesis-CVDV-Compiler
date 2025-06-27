@@ -1,6 +1,10 @@
-from src.pattern_match import *
+# src.pattern_match_rules
 
-def _is_const(node:ParsedNode):
+from src.pattern_match import *
+from typing import Final, List
+
+
+def _is_const(node:ParsedNode) -> bool:
     if node.name in ('nsign', 'sum', 'prod', 'complex'):
         return all(_is_const(c) for c in node.children)
     try:
@@ -9,7 +13,7 @@ def _is_const(node:ParsedNode):
     except ValueError:
         return False
 
-def __is_real_const(node:ParsedNode):
+def __is_real_const(node:ParsedNode) -> bool:
     if node.name in ('nsign', 'sum', 'prod'):
         return all(_is_const(c) for c in node.children)
     try:
@@ -18,7 +22,7 @@ def __is_real_const(node:ParsedNode):
     except ValueError:
         return False
 
-def __is_squared_factor(node:ParsedNode|complex, unit_scalar:complex):
+def __is_squared_factor(node:ParsedNode|complex, unit_scalar:complex) -> bool:
     try:
         if isinstance(node, ParsedNode):
             if node.children != []:
@@ -33,7 +37,7 @@ def __is_squared_factor(node:ParsedNode|complex, unit_scalar:complex):
     except ValueError:
         return False
 
-def __get_squared_factor(node:ParsedNode|complex, unit_scalar:complex):
+def __get_squared_factor(node:ParsedNode|complex, unit_scalar:complex) -> float:
     if isinstance(node, ParsedNode):
         z = complex(node.name)
     else:
@@ -77,7 +81,7 @@ def __is_mode(node:ParsedNode):
         return False
     except ValueError:
         pass
-    if node.name == '1' or node.name in assoc_ops:
+    if node.name == '1' or node.name in ASSOCIATIVE_OPS:
         return False
     if node.children == []:
         return True
@@ -89,7 +93,8 @@ def __is_mode(node:ParsedNode):
             return False
     return False
 
-terminate_patterns = [
+# Some patterns which can help quick termination
+terminate_patterns: Final[List] = [
     #1
     (parse_str('BOD(1)'),
      [],
@@ -99,13 +104,10 @@ terminate_patterns = [
     #),
 ]
 
-
-commute_rules_list = [
+commute_rules_list: Final[List[Rule]] = [
     Rule(parse_str('sum(prod(?c, ?1,?2),prod(?nc,?2,?1)))'), ['?1', '?2', '?c', '?nc'], parse_str('prod(?c, comm(?1, ?2))'),
          lambda x : not __check_equality_list(x, [(parse_str("?1"), parse_str("?2"))]) and
-        __check_equality_list(x, [(parse_str("?c"), parse_str("nsign(?nc)"))])
-         
-         ),
+        __check_equality_list(x, [(parse_str("?c"), parse_str("nsign(?nc)"))])),
     Rule(parse_str('sum(prod(?1,?2),prod(?2,?1))'), ['?1', '?2'], parse_str('acomm(?1, ?2)')),
     #(parse_str('comm(?1, ?1)'), ['?1'], parse_str('0')),
     #(parse_str('acomm(?1, ?1)'), ['?1'], parse_str('prod(2, ?1)')),
@@ -113,14 +115,15 @@ commute_rules_list = [
     #(parse_str('acomm(?1, ?2)'), ['?1', '?2'], parse_str('sum(prod(?1,?2),prod(?2,?1))')),
 ]
 
-gate_cancel_rules = [
+# TODO: discuss the possibility of moving the gate cancel rules to the post-processing stage instead of pattern matching stage
+gate_cancel_rules: Final[List[Rule]] = [
     Rule(parse_str('prod(qgate(h, qb1), qgate(h, qb1))'), ['qb1'], parse_str('prod')),
     Rule(parse_str('prod(qgate(x, qb1), qgate(x, qb1))'), ['qb1'], parse_str('prod')),
     Rule(parse_str('prod(qgate(s, qb1), qgate(dagger(s), qb1))'), ['qb1'], parse_str('prod')),
     Rule(parse_str('prod(qgate(dagger(s), qb1), qgate(s, qb1))'), ['qb1'], parse_str('prod')),
 ]
 
-basic_rules_list = [
+basic_rules_list: Final[List[Rule]] = [
     Rule(parse_str('dagger(tprod(?1, ?2))'), ['?1', '?2'], parse_str('tprod(dagger(?2), dagger(?1)))'),
      lambda x : x['?1'].name != '1' and x['?2'].name != '1'),
     Rule(parse_str('dagger(prod(?t, ?1, ?2))'), ['?1', '?2', '?t'], parse_str('prod(?t, dagger(?2), dagger(?1)))'),
@@ -154,9 +157,9 @@ basic_rules_list = [
     Rule(parse_str('dagger(qgate(sdg, qb1))'), ['qb1'], parse_str('qgate(s, qb1)')),
     Rule(parse_str('qgate(dagger(x), qb1)'), ['qb1'], parse_str('qgate(x, qb1)')),
     Rule(parse_str('square(x)'), [], parse_str('prod(x,x)')),
-
 ]
-exp_misc_rules = [
+
+exp_misc_rules: Final[List[Rule]] = [
     #13 This is specifically for gates with operator senario
     Rule(
         parse_str('exp( prod(t, N, M) )'),
@@ -170,10 +173,9 @@ exp_misc_rules = [
         parse_str('prod( exp(M), N)'),
         lambda x : x['N'].name == 'qgate'
     ), 
-
 ]
 
-branching_rules_list = [
+branching_rules_list: Final[List[Rule]] = [
     Rule(parse_str('prod(w, sum(prod(x, y), prod(x, z)))'), ['w', 'x', 'y', 'z'], parse_str('prod(v, sum(prod(1, y), prod(1, z)))'), 
          lambda x: x['x'].name != '1', 
          {'v':(lambda x,_: ParsedNode('prod', [x['w'].copy(), x['x'].copy()]))}),
@@ -184,7 +186,7 @@ branching_rules_list = [
          lambda x: x['x'].name != '1'),
 ]
 
-decomp_rules_list = [
+decomp_rules_list: Final[List[Rule]] = [
 
     #distribute exp over sum
     Rule(parse_str('exp(sum(?1, ?2))'), ['?1', '?2'], parse_str('prod(exp(?1), exp(?2))'), 
@@ -396,7 +398,6 @@ def __make_seq(pstring:str, qmode:ParsedNode, rev:bool = False):
         else:
             rotation = [parse_str(f"qgate(CR(-{math.pi}), {i}, {str(qmode)})")]
 
-
         if c == 'I':
             continue
         elif c == 'X':
@@ -417,7 +418,7 @@ def __make_seq(pstring:str, qmode:ParsedNode, rev:bool = False):
 def __get_j_coeff(pstring:str):
     return (-1j) ** len([True for c in pstring.strip() if c != 'I'])
 
-sigma_z_rules = [
+sigma_z_rules: Final[List[Rule]] = [
     Rule(parse_str('exp(prod(?1, sigma(1, qb1), ?2))'), ['?1', '?2', 'qb1'], parse_str('prod(qgate(h, qb1), exp(prod(?1, sigma(3, qb1), ?2)), qgate(h, qb1))')),
     Rule(parse_str('exp(prod(?1, sigma(1, qb1)))'), ['?1', 'qb1'], parse_str('prod(qgate(h, qb1), exp(prod(?1, sigma(3, qb1))), qgate(h, qb1))')),
     Rule(parse_str('exp(prod(sigma(1, qb1), ?2))'), ['?2', 'qb1'], parse_str('prod(qgate(h, qb1), exp(prod(sigma(3, qb1) ?2)), qgate(h, qb1),)')),
@@ -452,8 +453,7 @@ sigma_z_rules = [
     ),
 ]
 
-basic_gates_list = [
-
+basic_gates_list: Final[List[Rule]] = [    
     #Eliminate sigma(0)
     Rule(parse_str('sigma(0, qb1)'), ['qb1'], parse_str('1')),
 

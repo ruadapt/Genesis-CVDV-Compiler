@@ -1,7 +1,12 @@
+# src.pattern_match_apply
+
 from src.pattern_match import *
 from src.pattern_match_rules import *
+from typing import Final, List
+import sys
 
 
+# TODO: move this to src.serializer or src.circ_utils
 #Example of output str: CR(-2) q[1], qm[1]
 def to_cvdv_str(qgate:ParsedNode):
     gate_name = qgate.children[0].name
@@ -38,17 +43,29 @@ def main(input_string:str, qbcount=100, debug=False, write_ruleslist:str|None = 
 
     if debug:
         print()
-    greedy_rules_list = basic_gates_list + commute_rules_list + exp_misc_rules + basic_rules_list + gate_cancel_rules
-    branching_rules = branching_rules_list
-    recursive_rules = decomp_rules_list + sigma_z_rules
 
+    # Final[List[Rule]], Final shows that the list is immutable
+    greedy_rules_list: Final[List[Rule]] = (
+        basic_gates_list +
+        commute_rules_list +
+        exp_misc_rules +
+        basic_rules_list +
+        gate_cancel_rules
+    )
+
+    branching_rules: Final[List[Rule]] = branching_rules_list
+
+    recursive_rules: Final[List[Rule]] = (
+        decomp_rules_list +
+        sigma_z_rules
+    )
+
+    # Helper function to write the rules list to a file
     if write_ruleslist != None:
         full_list = greedy_rules_list + branching_rules + recursive_rules
         with open(write_ruleslist, 'w') as fp:
             for r in sorted(full_list, key=lambda x : x.id):
                 fp.write(f"{r.id}: {r}\n")
-
-    #start_time = timer()
 
     def is_terminal_node(x:ParsedNode):
         z = x
@@ -59,22 +76,6 @@ def main(input_string:str, qbcount=100, debug=False, write_ruleslist:str|None = 
     init_env.index_counters['qubit'] = qbcount
 
     final, out_res, stats = apply_rules_list_full_search(node, recursive_rules, branching_rules, greedy_rules_list, end_condition=is_terminal_node, dead_end_patterns=terminate_patterns, env=init_env)
-    #out_res, stats = apply_rules_list_full_search(node, full_list, greedy_rules_list, dead_end_patterns=terminate_patterns)
-    
-    '''print("~~ output ~~")
-    for env, out in sorted(out_res, key=lambda x : len([True for y in x[1].children if y.name in ('gate', 'qgate')])):
-        steps = env.history
-        for rule, ir in steps:
-            print(f"{'>' * env.layer} {rule.id}: {ir}")
-        print([r for r,_ in steps])
-        print(Counter([r for r,_ in steps]))
-        print("end_seq:", out)
-        print()
-
-    print(f'end time: {timer() - start_time}')
-    print()
-    print(stats)
-    print()'''
 
     if final != None:
 
@@ -91,8 +92,7 @@ def main(input_string:str, qbcount=100, debug=False, write_ruleslist:str|None = 
     else:
         raise Exception(f"Line {node} does not decompose")
 
-    
-    
+
 if __name__ == '__main__':
     qbcount = 100
     if len(sys.argv) >= 3:
