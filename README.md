@@ -13,6 +13,7 @@ Genesis is a compiler framework for Hamiltonian simulation targeting hybrid cont
 
 ## 🔥 News
 
+- [2025-06-25] Genesis^[1] was presented at the International Symposium on Computer Architecture (ISCA) 2025.
 - [2025-05-11] Genesis v1.0.0 released.
 
 ## 🚀 Installation
@@ -177,6 +178,4 @@ A comprehensive set of demonstration usage examples and general benchmark evalua
 
 ## 📖 Citation
 
-> Zihan Chen, Jiakang Li, Minghao Guo, Henry Chen, Zirui Li, Joel Bierman, Yipeng Huang, Huiyang Zhou, Yuan Liu, and Eddy Z. Zhang.
-> *Genesis: A Compiler Framework for Hamiltonian Simulation on Hybrid CV-DV Quantum Computers*.
-> In *Proceedings of the 52nd Annual International Symposium on Computer Architecture (ISCA '25)*, June 21-25, 2025, Tokyo, Japan.
+> [1] Chen, Zihan, Jiakang Li, Minghao Guo, Henry Chen, Zirui Li, Joel Bierman, Yipeng Huang, Huiyang Zhou, Yuan Liu, and Eddy Z. Zhang. "Genesis: A Compiler for Hamiltonian Simulation on Hybrid CV-DV Quantum Computers." In *Proceedings of the 52nd Annual International Symposium on Computer Architecture*, pp. 1583-1597. 2025.
