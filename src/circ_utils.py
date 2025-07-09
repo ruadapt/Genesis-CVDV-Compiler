@@ -70,7 +70,6 @@ class PiAngle():
     def __str__(this):
         return this.__repr__()
 
-
 def make_rectangle_graph(w, h):
     graph = nx.Graph()
     for i in range(h):
@@ -81,9 +80,16 @@ def make_rectangle_graph(w, h):
             graph.add_edge(('qm',i*w+j), ('qm',(1+i)*w+j))
     for i in range(w*h):
         graph.add_edge(('qm',i), ('q',i))
-
     return graph
 
+def make_all_connected_graph(num_nodes:int):
+    graph = nx.Graph()
+    for i in range(num_nodes):
+        for j in range(i+1, num_nodes):
+            graph.add_edge(('qm',i), ('qm',j))
+    for i in range(num_nodes):
+        graph.add_edge(('qm',i), ('q',i))
+    return graph
 
 class Mapping():
     def __init__(this, coupling_graph:nx.Graph):

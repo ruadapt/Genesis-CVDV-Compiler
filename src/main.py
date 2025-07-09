@@ -13,9 +13,10 @@ from src.output_manager import OutputManager
 from src.interpreter import Interpreter
 from src.cvdvqasm_line_reader import CVDVQASMLineReader
 import src.parser as parser
+from src.circuits import get_num_circuit_nodes
 
 
-def run_single(input_file: str, debug_mode: bool, output_override: str = None, stats_mode: bool = False, stats_file: str = "compilation_stats.json", clean_mode: bool = False) -> None:
+def run_single(input_file: str, debug_mode: bool, output_override: str = None, stats_mode: bool = False, stats_file: str = "compilation_stats.json", clean_mode: bool = False, full_graph: bool = False) -> None:
     """
     Process a single input file: parse, transform, interpret, and write outputs.
     """
@@ -108,8 +109,11 @@ def run_single(input_file: str, debug_mode: bool, output_override: str = None, s
                 intermediate_qbit_count = max(q_wires) + 1 if q_wires else 0
                 intermediate_qmode_count = max(qm_wires) + 1 if qm_wires else 0
 
-            square_len = math.ceil(math.sqrt(max([l for _,l in in_circ.wires])+1))
-            square_graph = make_rectangle_graph(square_len, square_len)
+            # Make the coupling graph
+            num_nodes = get_num_circuit_nodes(in_circ)
+            square_len = math.ceil(math.sqrt(num_nodes))
+            graph = make_rectangle_graph(square_len, square_len) if not full_graph else make_all_connected_graph(num_nodes)
+            
             for p in ('depth_sum',):
                 for m in ('simulated_annealing_tsp',):
                     for q in (False,):
@@ -117,7 +121,7 @@ def run_single(input_file: str, debug_mode: bool, output_override: str = None, s
                         print(f"Mapping {transform_fullpath_to_relative(logical_output_path)}_{p}_{m}_{q_str}")
 
                         mapping_start = time.time()
-                        out_circ = in_circ.map_to_graph(square_graph, pauli_mapping_order=p,tsp_method=m, qubit_swaps=q)
+                        out_circ = in_circ.map_to_graph(graph, pauli_mapping_order=p,tsp_method=m, qubit_swaps=q)
 
                         if stats_mode:
                             out[f"{logical_output_path}_{p}_{m}_{q_str}"] = out_circ.get_metrics()
@@ -161,6 +165,7 @@ def main():
     parser.add_argument("--debug", action="store_true", help="Enable debug comments")
     parser.add_argument("--stats", action="store_true", help="Enable stats collection")
     parser.add_argument("--clean", action="store_true", help="Only output the final result")
+    parser.add_argument("--full-graph", action="store_true", help="Use a full connected graph for mapping")
     args = parser.parse_args()
 
     # Determine mode: batch vs single
@@ -180,6 +185,7 @@ def main():
     stats_mode = args.stats
     stats_file = f"compilation_stats_{time.strftime('%Y%m%d_%H%M%S')}.json"
     clean_mode = args.clean
+    full_graph = args.full_graph
     # Process each job independently
     start_time = time.time()
     i = 1
@@ -197,7 +203,7 @@ def main():
         if out_override is None and args.output is not None:
             out_override = args.output
         
-        run_single(input_file, dbg, out_override, stats_mode, stats_file, clean_mode)
+        run_single(input_file, dbg, out_override, stats_mode, stats_file, clean_mode, full_graph)
         i += 1
 
     end_time = time.time()

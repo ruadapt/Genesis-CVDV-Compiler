@@ -810,3 +810,6 @@ class Circuit:
         out['total gate count'] = len(seq)
         out['depth'] = max(this.depths().values())
         return out
+    
+def get_num_circuit_nodes(circ:Circuit):
+    return max([l for _,l in circ.wires])+1
