@@ -13,7 +13,7 @@ Genesis is a compiler framework for Hamiltonian simulation targeting hybrid cont
 
 ## 🔥 News
 
-- [2025-06-25] Genesis^[1] was presented at the International Symposium on Computer Architecture (ISCA) 2025.
+- [2025-06-25] Genesis[1] was presented at the International Symposium on Computer Architecture (ISCA) 2025.
 - [2025-05-11] Genesis v1.0.0 released.
 
 ## 🚀 Installation
